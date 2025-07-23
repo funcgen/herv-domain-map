@@ -50,7 +50,7 @@ python scripts/02_map_domains_to_bed.py --input filtered_hits.tsv --output domai
 python scripts/03_score_alignment_and_motifs.py --input alignments/ --output summary.tsv
 ```
 
-🧠 Citation
+🧠 Citation  
 If you use this resource in your research, please cite:
 
 [Authors], "A Comprehensive Annotation of Conserved Protein Domains in Human Endogenous Retroviruses", [Journal, Year] (coming soon)
