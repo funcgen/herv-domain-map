@@ -49,16 +49,26 @@ Also:
 
 ```bash
 .
-├── data/                    # Input data: ORFs, HMM profiles, etc.
 ├── scripts/
-│   ├── 01_filter_hmmscan_hits.py
-│   ├── 02_map_domains_to_bed.py
-│   ├── 03_score_alignment_and_motifs.py
-│   ├── 16_extract_env_sequences.py
-│   └── 17_phobius_run_tool.sh
-├── results/                 # Output BED files, summary tables
+ ├── 01_generate_ERVs_bed.py
+ ├── 02_merge_ERVs_annotations.py
+ ├── 03_extract_fasta_from_bed.py
+ ├── 04_fix_orfs_headers.py
+ ├── 05_filter_hmmscan_hits.py
+ ├── 06_map_domains_to_bed.py
+ ├── 07_extract_domain_seq_from_orf.py
+ ├── 08_analyse_alignments.py
+ ├── 09_split_by_subfamily_and_summarize.py
+ ├── 10_generate_erv_functionality_summary.py
+ ├── 11_run_interproscan.sh
+ ├── 12_find_conserved_residues.py
+ ├── 13_extract_env_sequences.py
+ ├── 14_phobius_run_tool.sh
+ ├── run_erv_annotation_pipeline.py
+ ├── run_erv_analysis_pipeline.py
+ ├── run_erv_env_phobius_pipeline.py
 ├── README.md
-└── requirements.txt
+├── LICENSE
 ```
 ## 📋 Example Usage
 
