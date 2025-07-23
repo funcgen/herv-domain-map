@@ -3,10 +3,10 @@
 #                                                                             #
 #  Description  : Script to analyze domain conservation in HERV ORFs          #
 #                 and generate figures for the Results section of the         #
-#                 manuscript.                                                 #
+#                 manuscript                                                  #
 #                                                                             #
-#  Manuscript   : "Unexpectedly Widespread Conservation of Protein-Coding     #
-#                 Domains in Human Endogenous Retroviruses                    #
+#  Manuscript   : "A Comprehensive Annotation of Conserved                    # 
+#                  Protein Domains in Human Endogenous Retroviruses"          #
 #                                                                             #
 #                                                                             #
 #  Sections     : - Summary statistics of ORFs and domain hits                #
@@ -416,10 +416,6 @@ top_loci_wide <- top_loci_0.8 %>%
   )
 
 write.xlsx(top_loci_wide, file = "results/top_loci_wide_trios.xlsx", rowNames = FALSE)
-
-
-
-
 
 
 
