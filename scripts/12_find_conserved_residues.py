@@ -46,7 +46,7 @@ def main():
 
     df = parse_interproscan_xml_grouped(args.input)
     df.to_csv(args.output, sep="\t", index=False)
-    print(f"[✓] Output written to: {args.output} ({len(df)} rows)")
+    print(f"Output written to: {args.output} ({len(df)} rows)")
 
 if __name__ == "__main__":
     main()
