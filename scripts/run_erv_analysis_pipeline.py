@@ -36,7 +36,6 @@ def main():
     # Define outputs
     domain_fasta = f"{args.output_prefix}_domains.fasta"
     alignment_summary = f"{args.output_prefix}_alignment_summary.tsv"
-    filtered_bed = f"{args.output_prefix}_filtered.bed"
     subfamily_dir = f"{args.output_prefix}_subfamily"
     functionality_summary = f"{args.output_prefix}_functionality_summary.tsv"
     interproscan_output = args.interproscan_output or f"{args.output_prefix}_interproscan"
@@ -44,19 +43,19 @@ def main():
 
     os.makedirs(subfamily_dir, exist_ok=True)
 
-    # Step 1: Extract Domain Sequences
-    run_cmd([
-        "python", "07_extract_domain_seq_from_orf.py",
-        "-t", args.filtered_tsv,
-        "-f", args.orfs_fasta,
-        "-o", domain_fasta
-    ], "Extract Domain Sequences for Alignment")
+    # # Step 1: Extract Domain Sequences
+    # run_cmd([
+    #     "python", "07_extract_domain_seq_from_orf.py",
+    #     "-t", args.filtered_tsv,
+    #     "-f", args.orfs_fasta,
+    #     "-o", domain_fasta
+    # ], "Extract Domain Sequences for Alignment")
 
-    # Step 2: Align Domain Sequences
-    align_log = f"{args.output_prefix}_align.log"
-    run_cmd([
-        "bash", "9_align_aa_sequences.sh", domain_fasta, args.hmm_db, args.sto_dir
-    ], "Align Domain Sequences (hmmalign)", log_file=align_log)
+    # # Step 2: Align Domain Sequences
+    # align_log = f"{args.output_prefix}_align.log"
+    # run_cmd([
+    #     "bash", "9_align_aa_sequences.sh", domain_fasta, args.hmm_db, args.sto_dir
+    # ], "Align Domain Sequences (hmmalign)", log_file=align_log)
 
     # Step 3: Analyze Alignments
     run_cmd([
@@ -65,21 +64,21 @@ def main():
         "--output", alignment_summary
     ], "Analyze Alignment Coverage")
 
-    # Step 5: Split by Subfamily and Summarize
+    # Step 4: Split by Subfamily and Summarize
     run_cmd([
         "python", "09_split_by_subfamily_and_summarize.py",
-        "--input", filtered_bed,
+        "--input", args.bed,
         "--output_dir", subfamily_dir
     ], "Split by Subfamily and Generate Summaries")
 
-    # Step 6: Generate ERV Functionality Summary
+    # Step 5: Generate ERV Functionality Summary
     run_cmd([
         "python", "10_generate_erv_functionality_summary.py",
-        "--input", filtered_bed,
+        "--input", args.bed,
         "--output", functionality_summary
     ], "Generate ERV Functionality Summary")
 
-    # Step 7: Run InterProScan (Optional)
+    # Step 6: Run InterProScan (Optional)
     if not args.skip_interproscan:
         run_cmd([
             "bash", "11_run_interproscan.sh",
@@ -89,15 +88,15 @@ def main():
             "-c", str(args.cpus)
         ], "Run InterProScan")
 
-    # Step 8: Parse InterProScan XML for conserved residues
+    # Step 7: Parse InterProScan XML for conserved residues
     interproscan_xml = os.path.join(interproscan_output, os.path.basename(domain_fasta) + ".xml")
-    print(interproscan_xml)
-    if not args.skip_interproscan:
+    if not args.skip_interproscan and not args.skip_interproscan_parse:
         run_cmd([
             "python", "12_find_conserved_residues.py",
             "-i", interproscan_xml,
             "-o", interproscan_summary
         ], "Parse InterProScan XML to extract conserved residues")
+
 
 
     print("\nERV Domain Analysis Pipeline Completed!")
