@@ -111,8 +111,7 @@ python run_erv_env_phobius_pipeline.py \
 ```
 
 ### Step 4: Analysis of the Results (optional)
-To reproduce the downstream analysis and generate the figures used in our manuscript, you can run the R script:
-`analysis_hervs_article.R`
+To reproduce the downstream analysis and generate the figures used in our manuscript, you can run the R script: `analysis_hervs_article.R`
 
 
 ## 📦 Dataset
