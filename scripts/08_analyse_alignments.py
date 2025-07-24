@@ -66,7 +66,7 @@ def main():
 
                 out_f.write(f"{seqname}\t{domain_type}\t{coverage:.2f}\t{status}\n")
 
-    print(f"✅ Report written to {args.output}")
+    print(f"Report written to {args.output}")
 
 if __name__ == "__main__":
     main()
