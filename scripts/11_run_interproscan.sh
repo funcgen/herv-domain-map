@@ -39,7 +39,7 @@ fi
 
 # Check input file
 if [[ ! -f "$INPUT_FASTA" ]]; then
-  echo "❌ ERROR: Input FASTA file not found: $INPUT_FASTA"
+  echo "ERROR: Input FASTA file not found: $INPUT_FASTA"
   exit 2
 fi
 
@@ -47,7 +47,7 @@ fi
 mkdir -p "$OUTPUT_DIR"
 
 # Run InterProScan
-echo "➡️ Running InterProScan on $INPUT_FASTA"
+echo "➡Running InterProScan on $INPUT_FASTA"
 "$INTERPROSCAN_DIR/interproscan.sh" \
   -i "$INPUT_FASTA" \
   -dp \
