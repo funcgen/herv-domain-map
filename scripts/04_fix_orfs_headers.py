@@ -30,7 +30,7 @@ def main():
             else:
                 fout.write(line)
 
-    print(f"✅ Fixed headers written to: {args.output}")
+    print(f"Fixed headers written to: {args.output}")
 
 if __name__ == "__main__":
     main()
