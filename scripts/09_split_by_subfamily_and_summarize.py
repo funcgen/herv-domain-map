@@ -73,7 +73,7 @@ def main():
                 writer.writerow([subfamily, e["domain_class"], e["chrom"], e["start"], e["end"],
                                  e["coverage"], e["confidence"], e["hmm"]])
 
-    print(f"✅ Processed {len(subfamily_dict)} subfamilies into {args.output_dir}")
+    print(f"Processed {len(subfamily_dict)} subfamilies into {args.output_dir}")
 
 if __name__ == "__main__":
     main()
