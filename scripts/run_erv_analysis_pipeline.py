@@ -43,19 +43,19 @@ def main():
 
     os.makedirs(subfamily_dir, exist_ok=True)
 
-    # # Step 1: Extract Domain Sequences
-    # run_cmd([
-    #     "python", "07_extract_domain_seq_from_orf.py",
-    #     "-t", args.filtered_tsv,
-    #     "-f", args.orfs_fasta,
-    #     "-o", domain_fasta
-    # ], "Extract Domain Sequences for Alignment")
+    # Step 1: Extract Domain Sequences
+    run_cmd([
+        "python", "07_extract_domain_seq_from_orf.py",
+        "-t", args.filtered_tsv,
+        "-f", args.orfs_fasta,
+        "-o", domain_fasta
+    ], "Extract Domain Sequences for Alignment")
 
-    # # Step 2: Align Domain Sequences
-    # align_log = f"{args.output_prefix}_align.log"
-    # run_cmd([
-    #     "bash", "9_align_aa_sequences.sh", domain_fasta, args.hmm_db, args.sto_dir
-    # ], "Align Domain Sequences (hmmalign)", log_file=align_log)
+    # Step 2: Align Domain Sequences
+    align_log = f"{args.output_prefix}_align.log"
+    run_cmd([
+        "bash", "9_align_aa_sequences.sh", domain_fasta, args.hmm_db, args.sto_dir
+    ], "Align Domain Sequences (hmmalign)", log_file=align_log)
 
     # Step 3: Analyze Alignments
     run_cmd([
