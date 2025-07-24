@@ -85,7 +85,7 @@ def main():
             ]
             writer.writerow(row)
 
-    print(f"✅ Summary with quality and potential functionality generated: {args.output}")
+    print(f"Summary with quality and potential functionality generated: {args.output}")
 
 if __name__ == "__main__":
     main()
