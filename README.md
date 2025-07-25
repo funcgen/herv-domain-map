@@ -1,6 +1,6 @@
 # HERV Domain Annotation and Conservation
 
-This repository contains tools and pipelines for identifying, annotating, and evaluating the conservation of protein-coding domains in **human endogenous retroviruses (HERVs)**. The project focuses on detecting key retroviral domains such as **Gag**, **Pol**, **Env**, and **accessory proteins** in predicted HERV open reading frames (ORFs), using HMM-based models and motif detection.
+This repository contains scripts to run a pipeline for identifying, annotating, and evaluating the conservation of protein-coding domains in **human endogenous retroviruses (HERVs)**. The project focuses on detecting key retroviral domains such as **Gag**, **Pol**, **Env**, and **accessory proteins** in predicted HERV open reading frames (ORFs), using HMM-based models and motif detection.
 <p align="center">
  <img width="300" height="200" alt="image" src="https://github.com/user-attachments/assets/607eafc3-0462-4868-bd88-e257619f24f5" />
 </p>
@@ -12,7 +12,7 @@ Although most HERVs are considered non-functional, a subset retain conserved pro
 
 ## 🚀 Features
 
-- Domain annotation using **HMMER** with profiles from **GyDB**.
+- Domain annotation using **HMMER** with profiles from **GyDB**
 - ORF-domain mapping and filtering (best hit per domain class)
 - BED output for domain coordinates
 - Coverage scoring and motif search
@@ -116,7 +116,7 @@ To reproduce the downstream analysis and generate the figures used in our manusc
 
 ## 📦 Dataset
 
-This repository contains the scripts and pipelines used to generate and analyze the dataset described in our study.
+This repository contains the scripts used to generate and analyze the dataset described in our study.
 
 The full dataset—including annotated ORFs, domain predictions, alignment scores, and functional annotations—is available on Zenodo:
 
