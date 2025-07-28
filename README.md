@@ -128,7 +128,7 @@ Please cite our article (see below) and the corresponding dataset DOI if you reu
 ## 🧠 Citation  
 If you use this resource in your research, please cite:  
 
-Montserrat-Ayuso, T., & Esteve-Codina, A. (2025). *A comprehensive annotation of conserved protein domains in human endogenous retroviruses*. bioRxiv. https://doi.org/XXX
+Montserrat-Ayuso, T., & Esteve-Codina, A. (2025). *A comprehensive annotation of conserved protein domains in human endogenous retroviruses*. bioRxiv. https://doi.org/10.1101/2025.07.25.666750  
 
 ## 📎 License  
 MIT License. See LICENSE file for details.
