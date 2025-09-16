@@ -1,7 +1,7 @@
 import sys
 
 # You can change the allowed gap here (in base pairs)
-ALLOWED_GAP = 100
+ALLOWED_GAP = 150
 
 def parse_bed_line(line):
     """
