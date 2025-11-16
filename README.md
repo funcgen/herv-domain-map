@@ -2,7 +2,7 @@
 
 This repository contains scripts to run the pipeline for identifying, annotating, and evaluating the conservation of protein-coding domains in **human endogenous retroviruses (HERVs)**. The project focuses on detecting key retroviral domains such as **Gag**, **Pol**, **Env**, and **accessory proteins** in predicted HERV open reading frames (ORFs), using HMM-based models and motif detection.
 <p align="center">
- <img width="300" height="200" alt="image" src="https://github.com/user-attachments/assets/607eafc3-0462-4868-bd88-e257619f24f5" />
+ <img width="300" height="100" alt="image" src="https://github.com/user-attachments/assets/607eafc3-0462-4868-bd88-e257619f24f5" />
 </p>
 
 
