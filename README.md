@@ -96,9 +96,11 @@ python run_erv_analysis_pipeline.py \
   --bed results/ERV_GyDB_v4_domains.bed \
   --sto-dir results/alignments \
   --output-prefix results/ERV_GyDB_analysis \
-  --interproscan-dir /home/groups/funcgen/tmontser/software/interproscan/interproscan-5.75-106.0 \
+  --interproscan-dir /path/to/interproscan \
   --cpus 32
 ```
+InterProScan can be downloaded by following the official installation instructions available in the [InterProScan documentation](https://interproscan-docsdev.readthedocs.io/en/latest/HowToDownload.html).
+
 
 ### Step 3: Run Env Transmembrane Prediction (Phobius)
 This step analyzes Env domain sequences for transmembrane features using Phobius.
@@ -107,8 +109,10 @@ This step analyzes Env domain sequences for transmembrane features using Phobius
 python run_erv_env_phobius_pipeline.py \
   --domain-fasta results/ERV_GyDB_analysis_domains.fasta \
   --output-prefix results/ENV \
-  --phobius-dir /home/groups/funcgen/tmontser/software/phobius/phobius101_linux/phobius
+  --phobius-dir /path/to/phobius
 ```
+Phobius can be downloaded from the official website at this [link](https://software.sbc.su.se/phobius.html).
+
 
 ### Step 4: Analysis of the Results (optional)
 To reproduce the downstream analysis and generate the figures used in our manuscript, you can run the R script: `analysis_hervs_article.R`
