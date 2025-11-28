@@ -74,15 +74,18 @@ Also:
 
 ### Step 1: Run the Domain Annotation Pipeline
 This step detects retroviral domains in ORFs using HMMER and GyDB profiles and filters domain hits.
+For this step, the pipeline needs the gydb_domains_classification.tsv and combined_gydb.hmm files. The former is a tsv file relating each HMM profile to GAG, POL, ENV, Accessory or Other functional class. The latter is the single HMM profiles database needed by HMM scan. These files can be found in the Zenodo repository: 
+- [gydb_domains_classification.tsv](https://zenodo.org/api/records/17662456/draft/files/gydb_domains_classification.tsv/content)
+- [combined_gydb.hmm](https://zenodo.org/api/records/17662456/draft/files/combined_gydb.hmm/content)
 
 ```bash
 python run_erv_annotation_pipeline.py \
   -r ../GRCh38.primary_assembly.genome.fa.out \
   -g ../GRCh38.primary_assembly.genome.fa \
   --orf-mode viral \
-  -d hmm_profiles/gydb_domains_classification.tsv \
+  -d /path/to/gydb_domains_classification.tsv \
   --min-coverage 0 \
-  --hmm-db hmm_profiles/combined_gydb.hmm \
+  --hmm-db /path/to/combined_gydb.hmm \
   --output-prefix results/ERV_GyDB_v4
 ```
 ### Step 2: Run the Domain Analysis Pipeline
