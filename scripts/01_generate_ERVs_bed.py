@@ -4,50 +4,59 @@ Extract BED entries of internal ERV insertions
 from a RepeatMasker .out file.
 
 Internal regions are defined by:
-- repeat_class in ERV / MaLR / Gypsy LTR classes
-- repeat_name ending in -int / _int (case-insensitive) or _I (internal)
+- repeat_class in ERV / MaLR LTR classes (no Gypsy)
+- repeat_name ending in:
+    * -int     (MER4-int, HERVK13-int, MLT1J-int, ...)
+    * _I       (HERV1_I, ERV3-16A3_I, THE1_I, ...)
+    * -I       (internal portions in humans/mice)
+    * -I_MM    (mouse-specific internal naming)
 """
 
 import re
 import argparse
-from tqdm import tqdm
 
 
 def is_internal_class(rep_class: str) -> bool:
     """
-    Recognize RepeatMasker classes that contain HERV internal regions
-    based on class patterns (no whitelist of names).
+    Recognize RepeatMasker classes that contain ERV/MaLR internal regions.
+
+    The pattern LTR/ERV* captures:
+      - LTR/ERV1
+      - LTR/ERVK
+      - LTR/ERVL
+      - LTR/ERVL-MaLR
     """
     rep_class = rep_class.upper()
-
-    return (
-        rep_class.startswith("LTR/ERV")        # LTR/ERV1, LTR/ERVK, LTR/ERVL...
-        or rep_class.startswith("LTR/ERVL-MALR")  # MaLR (MLT, THE1...)
-        or rep_class.startswith("LTR/GYPSY")      # MamGyp internal
-    )
+    return rep_class.startswith("LTR/ERV")
 
 
 def is_internal(name: str) -> bool:
     """
-    Detect internal ERV regions based on RepeatMasker name patterns:
+    Detect internal ERV regions based on RepeatMasker name patterns.
 
-    - '-int' or '_int' at the end (MER4-int, HERVK13-int, MLT1J-int, ...)
-    - '_I' at the end (HERV1_I, HERV4_I, ERV3-16A3_I, THE1_I)
+    Internal if:
+    - name ends with '-int'
+    - name ends with '_I'
+    - name ends with '-I'
+    - name ends with '-I_MM'
 
+    Note: '_int' is intentionally NOT included.
     """
     if not name:
         return False
 
     n = name.strip()
 
-    # 1. Standard internal naming: '-int' or '_int' (case-insensitive)
-    if re.search(r'(?:-|_)int$', n, flags=re.IGNORECASE):
+    # 1. Standard: '-int'
+    if re.search(r'-int$', n, flags=re.IGNORECASE):
         return True
 
-    # 2. Internal-only families using the '_I' suffix
-    #    (HERV1_I, HERV4_I, ERV3-16A3_I, THE1_I, ...)
-    #    Note: this does NOT catch '-I' because of the underscore.
+    # 2. Internal families ending in '_I'
     if re.search(r'_I$', n, flags=re.IGNORECASE):
+        return True
+
+    # 3. Internal portions with '-I' or '-I_MM'
+    if re.search(r'-I(?:_MM)?$', n, flags=re.IGNORECASE):
         return True
 
     return False
@@ -58,18 +67,17 @@ def extract_internal_bed(rm_out, output_bed):
 
     with open(rm_out) as fh:
         for line in fh:
-            # Skip comment lines or headers (typically start with SW or score)
+            # Skip comment lines or headers
             if line.strip() == "" or line.startswith("SW") or line.startswith("score"):
                 continue
 
             fields = re.split(r"\s+", line.strip())
             if len(fields) < 11:
-                continue  # skip malformed lines
+                continue
 
             repeat_name  = fields[9]
             repeat_class = fields[10]
 
-            # Filter by class (ERV / MaLR / Gypsy) and internal name pattern
             if not (is_internal_class(repeat_class) and is_internal(repeat_name)):
                 continue
 
@@ -83,9 +91,8 @@ def extract_internal_bed(rm_out, output_bed):
                 f"{repeat_name}_pos_{chrom}_{start+1}_{end}"
                 f"_strand_{strand}_divergence_{divergence}"
             )
-            score = "0"
 
-            entries.append([chrom, str(start), str(end), name, score, strand])
+            entries.append([chrom, str(start), str(end), name, "0", strand])
 
     # Write BED
     with open(output_bed, "w") as out:
@@ -94,11 +101,13 @@ def extract_internal_bed(rm_out, output_bed):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Extract BED of ERV internal sequences from RepeatMasker output.")
+    parser = argparse.ArgumentParser(
+        description="Extract BED of ERV internal sequences from RepeatMasker output (ERV/MaLR, no Gypsy)."
+    )
     parser.add_argument("--repeatmasker", "-r", required=True, help="RepeatMasker .out file")
     parser.add_argument("--output", "-o", required=True, help="Output BED file")
-    args = parser.parse_args()
 
+    args = parser.parse_args()
     extract_internal_bed(args.repeatmasker, args.output)
 
 
