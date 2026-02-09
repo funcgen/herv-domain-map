@@ -127,7 +127,7 @@ This repository contains the scripts used to generate and analyze the dataset de
 
 The full dataset—including annotated ORFs, domain predictions, alignment scores, and functional annotations—is available on Zenodo:
 
-🔗 [https://doi.org/10.5281/zenodo.16318928](https://doi.org/10.5281/zenodo.16318928)
+🔗 [https://doi.org/10.5281/zenodo.16318927](https://doi.org/10.5281/zenodo.16318927)
 
 Please cite our article (see below) and the corresponding dataset DOI if you reuse the data in your own work.  
 
