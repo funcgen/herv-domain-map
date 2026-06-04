@@ -137,5 +137,8 @@ If you use this resource in your research, please cite:
 
 > Tomàs Montserrat-Ayuso, Aurora Pujol, Anna Esteve-Codina, A comprehensive annotation of conserved protein domains in human endogenous retroviruses, NAR Genomics and Bioinformatics, Volume 8, Issue 1, March 2026, lqag013, [https://doi.org/10.1093/nargab/lqag013](https://doi.org/10.1093/nargab/lqag013)   
 
+## 💰 Funding 
+This publication and all its results are supported by the AGAUR-FI predoctoral grant program (2025 FI-1 00642) Joan Oró, from the Secretariat for Universities and Research of the Department of Research and Universities of the Government of Catalonia, and by the European Social Fund Plus.
+
 ## 📎 License  
 MIT License. See LICENSE file for details.
