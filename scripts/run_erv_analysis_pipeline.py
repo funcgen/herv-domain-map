@@ -4,8 +4,11 @@ import argparse
 import subprocess
 import sys
 import os
+from pathlib import Path
+SCRIPT_DIR=Path(__file__).resolve().parent
 
 def run_cmd(cmd, desc, log_file=None):
+    cmd=[str(SCRIPT_DIR / c.removeprefix('./')) if c.endswith(('.py','.sh')) and '/' not in c.removeprefix('./') else c for c in cmd]
     print(f"\n{desc}\n{' '.join(cmd)}")
     if log_file:
         with open(log_file, "w") as log:
@@ -54,7 +57,7 @@ def main():
     # Step 2: Align Domain Sequences
     align_log = f"{args.output_prefix}_align.log"
     run_cmd([
-        "bash", "9_align_aa_sequences.sh", domain_fasta, args.hmm_db, args.sto_dir
+        sys.executable, "15_align_domains.py", domain_fasta, args.hmm_db, args.sto_dir
     ], "Align Domain Sequences (hmmalign)", log_file=align_log)
 
     # Step 3: Analyze Alignments
@@ -90,7 +93,7 @@ def main():
 
     # Step 7: Parse InterProScan XML for conserved residues
     interproscan_xml = os.path.join(interproscan_output, os.path.basename(domain_fasta) + ".xml")
-    if not args.skip_interproscan and not args.skip_interproscan_parse:
+    if not args.skip_interproscan_parse:
         run_cmd([
             "python", "12_find_conserved_residues.py",
             "-i", interproscan_xml,

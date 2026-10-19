@@ -114,7 +114,7 @@ domain_plot <- ggplot(domain_conservation_counts, aes(x = Gene, y = n)) +
   labs(
     title = "Conserved Retroviral Domains in Internal HERV ORFs",
     x = "Gene Class",
-    y = "Number of ORFs"
+    y = "Number of domain records"
   ) +
   theme_minimal(base_size = 22)
 ggsave(
@@ -179,7 +179,10 @@ ggsave(
 
 # Filter full-length domains
 ann_full_length <- ann_simple %>%
-  filter(Coverage > 0.95)
+  filter(Coverage > 0.95) %>%
+  mutate(Protein = paste(Query, Gene, Domain,
+    paste0(vapply(strsplit(ann_table$Line[ann_table$Coverage > 0.95], " +"), `[`, "", 18), "-",
+           vapply(strsplit(ann_table$Line[ann_table$Coverage > 0.95], " +"), `[`, "", 19)), sep = "|"))
 
 # Load motif analysis results
 motif_hits <- read.table("../results/ERV_GyDB_analysis_conserved_residues.tsv", 
@@ -191,7 +194,7 @@ motif_hits <- motif_hits %>%
     ORFs        = sub("^([^|]+\\|[^|]+)\\|.*$", "\\1", Protein),
     domain_type = sub("^([^|]*\\|){3}([^_|]+).*", "\\2", Protein)
   ) %>%
-  filter(ORFs %in% ann_full_length$Query)
+  semi_join(ann_full_length %>% select(Protein), by = "Protein")
 
 # Summary: number of unique full-length domains with motif data
 cat("Unique full-length domains with motif data:", length(unique(motif_hits$Protein)), "\n")

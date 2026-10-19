@@ -1,7 +1,8 @@
 #!/bin/bash
+set -euo pipefail
 
 # Tool to run Phobius on a FASTA file
-# Usage: ./phobius_run_tool.sh -i input.fasta -o output.txt [-d /path/to/phobius] [--short|--gff]
+# Usage: ./phobius_run_tool.sh -i input.fasta -o output.txt [-d /path/to/phobius] [--short]
 
 # Default values
 PHOBIUS_DIR="$(dirname "$0")"
@@ -28,12 +29,8 @@ while [[ $# -gt 0 ]]; do
             MODE="-short"
             shift
             ;;
-        --gff)
-            MODE="-gff"
-            shift
-            ;;
         -h|--help)
-            echo "Usage: $0 -i input.fasta -o output.txt [-d /path/to/phobius] [--short|--gff]"
+            echo "Usage: $0 -i input.fasta -o output.txt [-d /path/to/phobius] [--short]"
             exit 0
             ;;
         *)
@@ -47,7 +44,7 @@ done
 # Validate input
 if [[ -z "$INPUT" || -z "$OUTPUT" ]]; then
     echo "Error: Input and output must be specified."
-    echo "Usage: $0 -i input.fasta -o output.txt [-d /path/to/phobius] [--short|--gff]"
+    echo "Usage: $0 -i input.fasta -o output.txt [-d /path/to/phobius] [--short]"
     exit 1
 fi
 
@@ -59,7 +56,7 @@ fi
 # Validate input
 if [[ -z "$INPUT" || -z "$OUTPUT" ]]; then
     echo "Error: Input and output must be specified."
-    echo "Usage: $0 -i input.fasta -o output.txt [-d /path/to/phobius] [--short|--gff]"
+    echo "Usage: $0 -i input.fasta -o output.txt [-d /path/to/phobius] [--short]"
     exit 1
 fi
 

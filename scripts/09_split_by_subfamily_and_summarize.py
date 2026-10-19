@@ -28,15 +28,15 @@ def main():
             end = int(end)
 
             # Extract subfamily name (everything before first hyphen)
-            subfamily = name.split("-")[0]
+            subfamily = name.split("_pos_", 1)[0]
 
             # Parse fields from the name column
-            name_parts = name.split("|")
+            name_parts = name.rsplit("|", 4)
             try:
-                domain_class = name_parts[3]
-                hmm = name_parts[2]
-                confidence = name_parts[4]
-                coverage = name_parts[5]
+                domain_class = name_parts[2]
+                hmm = name_parts[1]
+                confidence = name_parts[3]
+                coverage = name_parts[4]
             except IndexError:
                 domain_class = "NA"
                 hmm = "NA"
@@ -49,6 +49,7 @@ def main():
                 "end": end,
                 "name": name,
                 "coverage": coverage,
+                "score": score,
                 "strand": strand,
                 "domain_class": domain_class,
                 "hmm": hmm,
@@ -62,7 +63,7 @@ def main():
         with open(bed_path, "w", newline="") as bed_f:
             writer = csv.writer(bed_f, delimiter="\t")
             for e in entries:
-                writer.writerow([e["chrom"], e["start"], e["end"], e["name"], e["coverage"], e["strand"]])
+                writer.writerow([e["chrom"], e["start"], e["end"], e["name"], e["score"], e["strand"]])
 
         # Summary TSV
         summary_path = os.path.join(args.output_dir, f"{subfamily}_summary.tsv")

@@ -4,9 +4,12 @@
 import argparse
 import subprocess
 import os
+from pathlib import Path
+SCRIPT_DIR=Path(__file__).resolve().parent
 import sys
 
 def run_cmd(cmd, desc):
+    cmd=[str(SCRIPT_DIR / c.removeprefix('./')) if c.endswith(('.py','.sh')) and '/' not in c.removeprefix('./') else c for c in cmd]
     print(f"\n{desc}\n{' '.join(cmd)}")
     result = subprocess.run(cmd, shell=False)
     if result.returncode != 0:
@@ -57,6 +60,10 @@ def main():
     parser.add_argument("--merge-script", default="02_merge_ERVs_annotations.py",
                         help="Merger script to call [default: 02_merge_ERVs_annotations.py]")
 
+    parser.add_argument('--hmm-Z', type=float, default=316, help='Fixed profile search space; pin for release comparisons')
+    parser.add_argument('--profile-thresholds', required=True)
+    parser.add_argument('--primary-scope', required=True)
+    parser.add_argument('--species', choices=['mouse','human'], required=True)
     args = parser.parse_args()
 
     # Intermediate file paths
@@ -130,7 +137,7 @@ def main():
     with open(hmmscan_log, "w") as log_file:
         print(f"\nStep 6/9: Run hmmscan on ORFs\nLogging to {hmmscan_log}")
         result = subprocess.run([
-            "hmmscan", "--domtblout", hmmscan_tbl, args.hmm_db, orfs_fixed_fasta
+            "hmmscan", "-Z", str(args.hmm_Z), "--domtblout", hmmscan_tbl, args.hmm_db, orfs_fixed_fasta
         ], stdout=log_file, stderr=subprocess.STDOUT)
         if result.returncode != 0:
             print("HMMscan failed")
@@ -144,14 +151,17 @@ def main():
         "--domain-classes", args.domain_classes,
         "--max-evalue", str(args.max_evalue),
         "--max-domain-evalue", str(args.max_domain_evalue),
-        "--min-coverage", str(args.min_coverage)
+        "--min-coverage", str(args.min_coverage),
+        "--profile-thresholds", args.profile_thresholds,
+        "--primary-scope", args.primary_scope,
+        "--species", args.species
     ], "Step 7/9: Filter HMMscan Hits")
 
     # Step 8: Map Domains to BED
     run_cmd([
         "python", "06_map_domains_to_bed.py",
         "-i", filtered_tsv,
-        "-o", bed_output
+        "-o", bed_output, "--internal-bed", merged_bed
     ], "Step 8/9: Map Domains to BED")
 
     # Step 9: Extract BED Sequences
@@ -160,7 +170,7 @@ def main():
         "-fi", args.genome,
         "-bed", bed_output,
         "-fo", bed_fasta,
-        "-name"
+        "-name", "-s"
     ], "Step 9/9: Extract Sequences from BED (bedtools getfasta)")
 
     print(f"\nPipeline completed!\n Final BED: {bed_output}\n Domain FASTA: {bed_fasta}")

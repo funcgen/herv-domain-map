@@ -4,8 +4,11 @@ import argparse
 import subprocess
 import sys
 import os
+from pathlib import Path
+SCRIPT_DIR=Path(__file__).resolve().parent
 
 def run_cmd(cmd, desc, log_file=None):
+    cmd=[str(SCRIPT_DIR / c.removeprefix('./')) if c.endswith(('.py','.sh')) and '/' not in c.removeprefix('./') else c for c in cmd]
     print(f"\n{desc}\n{' '.join(cmd)}")
     if log_file:
         with open(log_file, "w") as log:
@@ -21,7 +24,7 @@ def main():
     parser.add_argument("--domain-fasta", required=True, help="Input FASTA file with domain protein sequences")
     parser.add_argument("--output-prefix", required=True, help="Prefix for output files (e.g., results/ENV)")
     parser.add_argument("--phobius-dir", required=True, help="Path to Phobius installation directory")
-    parser.add_argument("--mode", choices=["short", "gff"], default=None, help="Phobius output format: short or gff")
+    parser.add_argument("--mode", choices=["short", "long"], default=None, help="Phobius output format: short or long")
     args = parser.parse_args()
 
     # Output files
@@ -38,11 +41,9 @@ def main():
 
     # Step 2: Run Phobius on ENV domains
     phobius_script = "./14_phobius_run_tool.sh"
-    cmd = [phobius_script, "-i", env_fasta, "-o", phobius_out, "-d", args.phobius_dir]
+    cmd = ["bash", phobius_script, "-i", env_fasta, "-o", phobius_out, "-d", args.phobius_dir]
     if args.mode == "short":
         cmd.append("--short")
-    elif args.mode == "gff":
-        cmd.append("--gff")
 
     run_cmd(cmd, "Run Phobius on ENV domain sequences", log_file=log_file)
 

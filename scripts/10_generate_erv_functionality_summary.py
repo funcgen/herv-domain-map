@@ -37,13 +37,13 @@ def main():
             if len(row) < 6:
                 continue
             chrom, start, end, name, score, strand = row[:6]
-            subfamily = name.split("-")[0]
+            subfamily = name.split("_pos_", 1)[0]
 
-            parts = name.split("|")
+            parts = name.rsplit("|", 4)
             try:
-                domain_class = parts[3].upper()
-                domain_name = parts[2]
-                conservedness = parts[4]
+                domain_class = parts[2].upper()
+                domain_name = parts[1]
+                conservedness = parts[3]
             except IndexError:
                 domain_class = "NA"
                 domain_name = "NA"
@@ -66,7 +66,7 @@ def main():
             "POL", "POL Quality",
             "ENV", "ENV Quality",
             "ACCESSORY", "ACCESSORY Quality",
-            "Potentially Functional",
+            "Gag Pol Env detected somewhere in family",
             "Domains Detected"
         ]
         writer.writerow(header)
@@ -85,7 +85,7 @@ def main():
             ]
             writer.writerow(row)
 
-    print(f"Summary with quality and potential functionality generated: {args.output}")
+    print(f"Summary with quality and family aggregate presence generated: {args.output}")
 
 if __name__ == "__main__":
     main()

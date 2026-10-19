@@ -9,6 +9,11 @@
 #SBATCH --time=06:00:00  # 2 days max runtime
 #SBATCH --partition=general
 
+# Example for a NEW genome reconstruction. For a domain-only database release,
+# follow the frozen-ORF rescan commands in the release README instead.
+set -eo pipefail
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 # Activate environment
 echo "Activating environment."
 source ~/.bashrc
@@ -16,12 +21,16 @@ conda activate te_preprocessing
 
 
 echo "Running annotation pipeline."
-python run_erv_annotation_pipeline.py \
+python "$SCRIPT_DIR"/run_erv_annotation_pipeline.py \
   -r ../GRCh38.primary_assembly.genome.fa.out \
   -g ../GRCh38.primary_assembly.genome.fa \
   --orf-mode viral \
   -d hmm_profiles/gydb_domains_classification.tsv \
   --min-coverage 0 \
+  --species human \
+  --hmm-Z 316 \
+  --profile-thresholds "$SCRIPT_DIR/../config/ERVL_profile_thresholds.tsv" \
+  --primary-scope "$SCRIPT_DIR/../config/ERVL_primary_scope.json" \
   --hmm-db hmm_profiles/combined_gydb.hmm \
   --short-gap 200 \
   --long-gap 0 \
@@ -37,7 +46,7 @@ module load Java/11.0.2
 module load PCRE2
 
 echo "Running analysis pipeline."
-python run_erv_analysis_pipeline.py \
+python "$SCRIPT_DIR"/run_erv_analysis_pipeline.py \
 --filtered-tsv results/ERV_GyDB_v6_filtered.tsv \
 --hmm-db hmm_profiles/combined_gydb.hmm \
 --orfs-fasta results/ERV_GyDB_v6_orfs_fixed.fasta \
@@ -49,7 +58,7 @@ python run_erv_analysis_pipeline.py \
 
 
 echo "Running Phobius pipeline."
-python run_erv_env_phobius_pipeline.py \
+python "$SCRIPT_DIR"/run_erv_env_phobius_pipeline.py \
 --domain-fasta results/ERV_GyDB_analysis_domains.fasta \
 --output-prefix results/ENV \
 --phobius-dir /home/groups/funcgen/tmontser/software/phobius/phobius101_linux/phobius

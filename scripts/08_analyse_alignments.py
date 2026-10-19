@@ -23,12 +23,14 @@ def parse_hmmalign_sto(sto_file):
     return alignment
 
 def score_alignment(pp_string):
+    # Count the original PP symbol set 5-9 and *. These are rounded posterior
+    # bins, not exact P >= 0.5 and not evidence of protein functionality.
     high_conf = sum(1 for c in pp_string if c in ["*", "9", "8", "7", "6", "5"])
     total = len(pp_string)
     return high_conf / total if total > 0 else 0
 
 def main():
-    parser = argparse.ArgumentParser(description="Parse hmmalign alignments and score coverage.")
+    parser = argparse.ArgumentParser(description="Parse hmmalign alignments and score posterior support.")
     parser.add_argument("--input", required=True, help="Directory with .sto files")
     parser.add_argument("--output", required=True, help="Output TSV file")
     args = parser.parse_args()
@@ -39,20 +41,23 @@ def main():
         return
 
     with open(args.output, "w") as out_f:
-        out_f.write("Sequence\tDomain\tCoverage\tStatus\n")
+        out_f.write("Sequence\tProfile\tSupportedAlignmentColumnFraction\tColumnSupportCategory\tResiduePosteriorSupportedFraction\n")
         for file in sto_files:
             alignment = parse_hmmalign_sto(file)
             for seqname, data in alignment.items():
                 pp = data["pp"]
                 coverage = score_alignment(pp)
+                assert len(data['seq']) == len(pp)
+                residue_pp = ''.join(c for aa,c in zip(data['seq'],pp) if aa not in '.-')
+                residue_support = score_alignment(residue_pp)
 
-                # Extract domain type from header (3rd field in |)
+                # Extract the exact profile from the right-hand metadata fields
                 parts = seqname.split("|")
-                domain_type = parts[2] if len(parts) >= 3 else "Unknown"
+                domain_type = parts[-2] if len(parts) >= 4 else "Unknown"
 
-                # Status based only on coverage
+                # Categories describe alignment-column posterior support only
                 if coverage >= 0.85:
-                    status = "Intact"
+                    status = "High"
                 elif coverage >= 0.70:
                     status = "Moderate"
                 elif coverage >= 0.50:
@@ -64,7 +69,7 @@ def main():
                 else:
                     status = "No Alignment"
 
-                out_f.write(f"{seqname}\t{domain_type}\t{coverage:.2f}\t{status}\n")
+                out_f.write(f"{seqname}\t{domain_type}\t{coverage:.3f}\t{status}\t{residue_support:.3f}\n")
 
     print(f"Report written to {args.output}")
 

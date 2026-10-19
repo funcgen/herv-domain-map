@@ -75,8 +75,11 @@ Also:
 ### Step 1: Run the Domain Annotation Pipeline
 This step detects retroviral domains in ORFs using HMMER and GyDB profiles and filters domain hits.
 For this step, the pipeline requires the files gydb_domains_classification.tsv and combined_gydb.hmm. The former is a TSV file that maps each HMM profile to its corresponding functional class (GAG, POL, ENV, Accessory, or Other), while the latter is the combined HMM profile database used by hmmscan. Both files are available in the Zenodo repository:  
-- [gydb_domains_classification.tsv](https://zenodo.org/api/records/17662456/draft/files/gydb_domains_classification.tsv/content)
-- [combined_gydb.hmm](https://zenodo.org/api/records/17662456/draft/files/combined_gydb.hmm/content)
+- [gydb_domains_classification.tsv](https://zenodo.org/api/records/23469632/files/gydb_domains_classification.tsv/content)
+- [combined_gydb.hmm](https://zenodo.org/api/records/23469632/files/combined_gydb.hmm/content)
+
+These links point to the human v6 record. The classification map is species-specific: for mouse, use the
+`gydb_domains_classification.tsv` from the [mouse v2 record](https://zenodo.org/records/23469639) (`combined_gydb.hmm` is identical in both).
 
 ```bash
 python run_erv_annotation_pipeline.py \
@@ -85,6 +88,10 @@ python run_erv_annotation_pipeline.py \
   --orf-mode viral \
   -d /path/to/gydb_domains_classification.tsv \
   --min-coverage 0 \
+  --species human \
+  --hmm-Z 316 \
+  --profile-thresholds ../config/ERVL_profile_thresholds.tsv \
+  --primary-scope ../config/ERVL_primary_scope.json \
   --hmm-db /path/to/combined_gydb.hmm \
   --output-prefix results/ERV_GyDB_v4
 ```
@@ -127,7 +134,11 @@ This repository contains the scripts used to generate and analyze the dataset de
 
 The full dataset—including annotated ORFs, domain predictions, alignment scores, and functional annotations—is available on Zenodo:
 
-🔗 [https://doi.org/10.5281/zenodo.16318927](https://doi.org/10.5281/zenodo.16318927)
+- Human (GRCh38), v6: 🔗 [https://doi.org/10.5281/zenodo.23469632](https://doi.org/10.5281/zenodo.23469632)
+- Mouse (GRCm39), v2: 🔗 [https://doi.org/10.5281/zenodo.23469639](https://doi.org/10.5281/zenodo.23469639)
+
+The concept DOIs [10.5281/zenodo.16318927](https://doi.org/10.5281/zenodo.16318927) (human) and
+[10.5281/zenodo.17752473](https://doi.org/10.5281/zenodo.17752473) (mouse) always resolve to the latest version.
 
 Please cite our article (see below) and the corresponding dataset DOI if you reuse the data in your own work.  
 
@@ -142,3 +153,36 @@ This publication and all its results are supported by the AGAUR-FI predoctoral g
 
 ## 📎 License  
 MIT License. See LICENSE file for details.
+
+
+## ERV-L Gag release update
+
+Use the shared 316-profile collection and species-specific classification maps.
+The two local ERV-L Gag models require the supplied bit-score guards and family
+scope configurations. E-values alone are not a validated decision rule.
+GAG_Fv1_N is a separate short-fragment supplement, not a primary whole-Gag hit.
+
+For this domain-only update, reuse the deposited internal BED, internal FASTA
+and ORF FASTA unchanged. Do not reconstruct loci or recalculate ORFs using
+current merger defaults. Scan the complete frozen ORF catalog with `-Z 316`,
+then run script 05 with both config files and `--species`. Script 06 requires
+the actual zero-based internal BED. Domain nucleotide FASTA is coding-oriented
+in the updated release; use `bedtools getfasta -s` when extracting from genome.
+
+The missing alignment driver is supplied as `scripts/15_align_domains.py`.
+Posterior alignment support is distinct from model-span coverage, sequence
+identity and biological functionality. Family-level Gag/Pol/Env presence does
+not establish co-occurrence at a locus. Use the per-locus tables for that claim.
+The article analysis now joins CDD sites to exact selected domain identifiers,
+not merely to ORFs containing some other full-length domain.
+
+Pin InterProScan 5.75-106.0 and Phobius 1.01 for release reproduction. Reuse old
+InterProScan evidence only for exact peptide matches; regenerate changed or new
+peptides and document cache provenance. Unsupported Phobius `-gff` is removed.
+
+Public inputs: https://zenodo.org/records/23469632 (human v6) and
+https://zenodo.org/records/23469639 (mouse v2); the internal BED, internal FASTA
+and ORF FASTA are inherited unchanged from the previous versions. Private `/draft` URLs in earlier
+documentation are not reproducible download links; use these public records.
+The bit-score guards and family scope are in `config/ERVL_profile_thresholds.tsv`
+and `config/ERVL_primary_scope.json`.

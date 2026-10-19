@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Exit on error
-set -e
+set -euo pipefail
+INPUT_FASTA=""; OUTPUT_DIR=""; INTERPROSCAN_DIR=""
 
 # ------------------------------
 # 14_run_interproscan.sh
@@ -50,6 +51,7 @@ mkdir -p "$OUTPUT_DIR"
 echo "➡Running InterProScan on $INPUT_FASTA"
 "$INTERPROSCAN_DIR/interproscan.sh" \
   -i "$INPUT_FASTA" \
+  -f XML,JSON,TSV,GFF3 \
   -dp \
   -cpu "$CPUS" \
   --output-dir "$OUTPUT_DIR"
