@@ -106,7 +106,7 @@ python run_erv_analysis_pipeline.py \
   --interproscan-dir /path/to/interproscan \
   --cpus 32
 ```
-InterProScan can be downloaded by following the official installation instructions available in the [InterProScan documentation](https://interproscan-docsdev.readthedocs.io/en/latest/HowToDownload.html).
+InterProScan can be downloaded by following the official installation instructions available in the [InterProScan documentation](https://interproscan-docs.readthedocs.io/en/v5/HowToDownload.html).
 
 
 ### Step 3: Run Env Transmembrane Prediction (Phobius)
