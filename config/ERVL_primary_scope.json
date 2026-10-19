@@ -4,6 +4,9 @@
     "MERVL_2A-int"
   ],
   "human": [
-    "HERVL-int"
+    "HERVL-int",
+    "ERVL-int",
+    "ERVL-B4-int",
+    "ERVL-E-int"
   ]
 }
