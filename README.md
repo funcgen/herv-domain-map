@@ -78,9 +78,6 @@ For this step, the pipeline requires the files gydb_domains_classification.tsv a
 - [gydb_domains_classification.tsv](https://zenodo.org/api/records/23469632/files/gydb_domains_classification.tsv/content)
 - [combined_gydb.hmm](https://zenodo.org/api/records/23469632/files/combined_gydb.hmm/content)
 
-These links point to the human v6 record. The classification map is species-specific: for mouse, use the
-`gydb_domains_classification.tsv` from the [mouse v2 record](https://zenodo.org/records/23469639) (`combined_gydb.hmm` is identical in both).
-
 ```bash
 python run_erv_annotation_pipeline.py \
   -r ../GRCh38.primary_assembly.genome.fa.out \
