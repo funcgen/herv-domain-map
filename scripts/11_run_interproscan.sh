@@ -56,4 +56,14 @@ echo "➡Running InterProScan on $INPUT_FASTA"
   -cpu "$CPUS" \
   --output-dir "$OUTPUT_DIR"
 
+# Verify JSON completeness against both source sequences and XML before reporting success.
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+OUTPUT_BASENAME="$(basename -- "$INPUT_FASTA")"
+"${PYTHON_BIN:-python3}" "$SCRIPT_DIR/16_validate_interproscan_json.py" \
+  "$OUTPUT_DIR/$OUTPUT_BASENAME.json" \
+  --fasta "$INPUT_FASTA" \
+  --xml "$OUTPUT_DIR/$OUTPUT_BASENAME.xml" \
+  --repair-omitted-root \
+  --report "$OUTPUT_DIR/$OUTPUT_BASENAME.json.validation.json"
+
 echo "InterProScan completed: Results in $OUTPUT_DIR"
