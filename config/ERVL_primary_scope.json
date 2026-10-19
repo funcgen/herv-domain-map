@@ -1,7 +1,9 @@
 {
   "mouse": [
     "MERVL-int",
-    "MERVL_2A-int"
+    "MERVL_2A-int",
+    "ERVL-int",
+    "ERVL-B4-int"
   ],
   "human": [
     "HERVL-int",
