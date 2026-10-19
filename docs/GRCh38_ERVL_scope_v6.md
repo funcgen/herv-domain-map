@@ -14,9 +14,7 @@ No model, profile threshold, or winner-ranking change is required.
 
 Only the human subfamily allowlist is expanded from `HERVL-int` to
 `HERVL-int`, `ERVL-int`, `ERVL-B4-int`, and `ERVL-E-int`. Mouse is unchanged.
-Other families still go to `outside_scope_review` when appropriate. This is
-an explicitly limited scope expansion based on reviewed candidates, not a
-claim that every ERVL family or unrelated ERV group has been validated.
+Other families still go to `outside_scope_review` when appropriate.  
 
 Both sequence and domain bit scores must be >=95 for `GAG_ERVL_Hs` or >=130
 for `GAG_MERVL`; independent domain E <=1e-5. Legacy sequence and conditional
